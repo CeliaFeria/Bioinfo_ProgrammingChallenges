@@ -111,7 +111,7 @@ def get_interacction(all_locus)
         if all_locus.include?(key.upcase)
           if key.upcase != locus.upcase  
           print("included another gen on the list\n")
-          interacctions[key1] = [key]
+          interacctions[key1] = key
           end
         end
     
