@@ -126,6 +126,11 @@ end
  return interactions
 end
 
+
+    
+
+
+
 def get_Network(interactions)
   aux_has = Hash.new
   aux_has = interactions #auxiliar hash because without it I get an error, i cant modify the hash and iterate
@@ -136,12 +141,15 @@ def get_Network(interactions)
     count = 0
       values2.each do |value2|
       if interactions_keys.include?(value2.upcase) #include the information of the "locus gene" that interact with other "locus gene"
+        next if array.include?(value2)
+        array.push(value2)
         bigger_int = interactions.keys.select{|x| x.upcase == value2.upcase} 
-         array = values2
          next if interactions[bigger_int[0]].nil? 
          interactions[bigger_int[0]].each do |x| 
-         next if array.include?(x) #keep the interactions in array
-         array.push(x)
+           if interactions_keys.include?(x.upcase) #include only the interactions between genes on the list
+           next if array.include?(x)
+           array.push(x)
+           end
          end
          network[key] = array #include all the interactions associated to a "locus gene"
          next if network[bigger_int[0]].nil?
@@ -160,13 +168,19 @@ def get_Network(interactions)
 end
 
 def get_KEGG_info (locus)
-  
-  #locus.each do |locus|
+  kegg_info = Hash.new
+  locus.each do |locus|
   res = fetch("http://togows.org/entry/genes/ath:#{locus}/pathways.json");  #ath = Arabidopsis thaliana
   body = JSON.parse(res.body)
-  return body
-  #end
+  body[0].each do |key, values|
+    next if values.nil?
+    next if kegg_info.keys.include?(key)
+    kegg_info[key] = values
+  end
+  end
+    return kegg_info
 end 
+
 
 def get_GO (locus)
   go_info = []
