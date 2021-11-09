@@ -1,5 +1,5 @@
 
-require "./Web_info.rb"
+require "./Web.rb"
 
 class Network
   
@@ -63,3 +63,5 @@ end
   
   
 end 
+
+
